@@ -1,0 +1,166 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Personal Information</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="keywords" content="Movie_store Responsive web template, Bootstrap Web Templates, Flat Web Templates, Andriod Compatible web template, 
+Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyErricsson, Motorola web design" />
+		<script type="application/x-javascript">
+			addEventListener("load", function() {
+				setTimeout(hideURLbar, 0);
+			}, false);
+
+			function hideURLbar() {
+				window.scrollTo(0, 1);
+			}
+		</script>
+		<link href="css/bootstrap.css" rel='stylesheet' type='text/css' />
+		<link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
+		<link rel="stylesheet" href="layui/css/layui.css" media="all">
+		<script src="js/jquery.min1.js"></script>
+		<script src="js/jquery.min.js"></script>
+		<script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
+		<script type="text/javascript" src="js/jquery.params.js"></script>
+		<script type="text/javascript" src="layui/layui.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/Chart.min.js"></script>
+	</head>
+	<body>
+		<div class="container">
+			<div class="container_wrap">
+				<div class="header_top">
+					<div class="col-sm-3 logo"><a href="#"></a></div>
+					<div class="col-sm-3 header_right" style="position:absolute;right:-80px;bottom:680px;">
+						<ul class="header_right_box">
+							<li><img src="images/icon1.png"></li>
+							<li>
+								<p><a href="#" id="username" style="color:#ffffff" ;text-decoration: none;></a></p>
+							</li>
+						</ul>
+					</div>
+					<div class="clearfix"> </div>
+				</div>
+				<div class="content" style="background: rgba(128, 190, 193, 0.5);">
+					<div class="movie_top">
+						<div class="col-md-9 movie_box">
+							<div class="grid images_3_of_2" style="width:1000px; height:300px;">
+								<!-- div class="movie_image" id="pic" style="border: 1px solid #ffffff;width:40%; height:500px;display: inline;float: left;">
+										-->
+								<!-- <img class="img-responsive" id="pic"> -->
+								<div class="layui-carousel" id="test" lay-filter="test" style="border: 1px solid #ffffff;width: 100%;">
+									<div carousel-item="" id="lunbo"></div>
+								</div>
+								<div class="desc1 span_3_of_2 " style="border: 1px solid #ffffff;width: 100%;">
+									<p class="movie_option" style="height:5%"><strong style="font-size: 16px;color:rgba(60, 205, 211, 0.5);">Username:
+										</strong>
+										<div id="username" class="username"></div>
+									</p>
+									<p class="movie_option" style="height:5%"><strong style="font-size: 16px;color:rgba(60, 205, 211, 0.5);">Phone:
+										</strong>
+										<div id="phone"></div>
+									</p>
+									<p class="movie_option" style="height:5%"><strong style="font-size: 16px;color:rgba(60, 205, 211, 0.5);">Password:
+										</strong>
+										<div id="pwd"></div>
+									</p>
+									<div class="his-list"></div>
+									<a class="btn" href="recommend1.html" style="position:absolute;right:-180px;bottom:20px;color:rgb(0, 85, 51);background-color:rgba(255, 255, 255,0.5);border-radius: 50px;border: 1px solid #ffffff"><span>
+										</span>Back</a>
+								</div>
+
+							</div>
+
+						</div>
+						<div class="clearfix"> </div>
+					</div>
+					<div class="clearfix"> </div>
+				</div>
+			</div>
+		</div>
+		
+
+
+		<script>
+			$(document).ready(function() {
+				$("#username").text(localStorage.getItem("username"));
+				$(".username").text(localStorage.getItem("username"));
+				$("#phone").text(localStorage.getItem("phone"));
+				$("#pwd").text(localStorage.getItem("pwd"));
+
+				layui.use('laypage', function() {
+					var laypage = layui.laypage;
+					// var element = layui.element;
+					var count = 0;
+					var total;
+						$.ajax({
+							type: 'GET',
+
+							url: "http://101.132.157.72:8086/SHistory/list?userId=" + localStorage.getItem("userid"),
+
+							async: false,
+							success: function(datas) {
+								count = datas.length;
+								total = datas;
+							},
+							error: function(XMLHttpRequest, textStatus, errorThrown) {
+								// 状态码
+								console.log(XMLHttpRequest.status);
+								// 状态
+								console.log(XMLHttpRequest.readyState);
+								// 错误信息   
+								console.log(textStatus);
+							}
+						})
+
+					function showReocrd(pageNo, pageSize, total) {
+						$.each(total, function(index, item) {
+							if (index >= (pageNo - 1) * pageSize && index < pageNo * pageSize) {
+								var lianjie = $(
+									"<a href='http://127.0.0.1:8848/xuewei/acupoint.html?acuname=" + item.acupointName +
+									"'style='color:#ffffff;heght=50px;background-color: rgba(0,0,0,0.5);border-radius: 5px;border: 1px solid #ffffff;font-size:20px;'></a>"
+								).append(item.acupointName);
+								var title = $("<div></div>").append(
+									lianjie);
+								var content = $(
+									"<div></div>"
+								).append(
+									item.acupointFunction);
+								var content1 = $(
+									"<div></div>"
+								).append(
+									item.acupointMeridian);
+								var i = $(
+									"<div style='color:rgb(0, 85, 51);background-color:rgba(255, 255, 255,0.5);border-radius: 40px;border: 1px solid #ffffff;'></div>"
+								).append(content, content1);
+								var t = $("<div></div>").append(title, i);
+								$("#his-list").append(t);
+							}
+						})
+					}
+					showReocrd(1, 4, total);
+					laypage.render({
+						elem: 'fenye',
+						theme: '#009393',
+						layout: ['prev', 'page', 'next', 'skip'],
+						first: '首页',
+						last: '尾页',
+						curr: 1,
+						limit: 4,
+						count: count, //数据总数，从服务端得到
+						jump: function(obj, first) { //obj为当前页的属性和方法，第一次加载first为true
+							if (!first) {
+								//清空以前加载的数据
+								$('#acupoint-list').empty();
+								//调用加载函数加载数据
+								showReocrd(obj.curr, obj.limit, total);
+							}
+						}
+					});
+
+
+				});
+			})
+		</script>
+	</body>
+</html>

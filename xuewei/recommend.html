@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	
+
+<link rel="stylesheet" type="text/css" href="css/b1.css">
+<link rel="stylesheet" href="css/s2.css">
+<style type="text/css">
+		
+		.page a{
+			padding: 0 10px;
+			text-decoration: none;
+		}
+		
+	</style>
+
+</head>
+<body>
+	
+''
+<div id="rig" class="container top-block">
+	<a href='login.html' style='color:#ffffff;Font-size:18px'>LOGIN</a>
+</div>
+
+
+<div id="top-image">
+  <div id="content" class="container center-block">
+    <div class="jumbotron">
+      <div class="container"> 
+        <h1>Acupoint</h1>
+        <p>We can help you retrieve comprehensive acupoint information.</p>
+        <div class="input-group input-group-lg"> 
+          <input type="text" class="form-control" placeholder="Please enter keywords" aria-describedby="sizing-addon1">
+          <span class="input-group-btn">
+          <button class="btn btn-default" type="button" style='color:#009393;Font-size:18px'onclick="search()">search</button>
+          </span> </div>
+			<p class="page">History Search hot words:
+				<a href='index.html' style='color:#ffffff;Font-size:2rem'>易怒</a>
+				<a href='index.html' style='color:#ffffff;Font-size:2rem'>肾虚</a>
+				<a href='index.html' style='color:#FFFFFF;Font-size:2rem'>头疼</a>
+			</p>
+		</div>
+    </div>
+  </div>
+</div>
+
+<script src="js/jquery.min1.js"></script>
+<script src="js/ios-parallax1.js"></script> 
+<script type="text/javascript">
+$(document).ready(function() {
+  $('#top-image').iosParallax({
+	movementFactor: 50
+  });
+});
+
+search=function(){
+	alert("请先注册登录");
+}
+</script>
+</body>
+</html>

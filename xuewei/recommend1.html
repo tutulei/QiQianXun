@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="zh">
+	<head>
+
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+		<link rel="stylesheet" type="text/css" href="css/b1.css">
+		<link rel="stylesheet" href="css/s2.css">
+		<link rel="stylesheet" href="layui/css/layui.css" media="all">
+		<script src="js/jquery.min1.js"></script>
+		<script src="js/jquery.min.js"></script>
+		<script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
+		<script type="text/javascript" src="js/jquery.params.js"></script>
+		<script type="text/javascript" src="layui/layui.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/Chart.min.js"></script>
+		<script src="user.js"></script>
+		<style type="text/css">
+			.page a {
+
+				text-decoration: none;
+			}
+		</style>
+
+
+	</head>
+	<body>
+		<div id="rig" class="container top-block" style="position:absolute;right:-60px;bottom:640px;">
+			<p>
+				<img src="images/icon1.png">
+				<a href='user.html' style='color:#ffffff;Font-size:20px' id='username'></a>
+			</p>
+		</div>
+
+
+		<div id="top-image" style="overflow: scroll;">
+			<div class="jumbotron">
+				<div class="container">
+					<h1>Acupoint<img src="images/xw.png"></h1>
+					<!-- <hr class="layui-bg-black" style="margin-top:30px">
+					<fieldset class="layui-elem-field layui-field-title"> -->
+					<div class="input-group input-group-lg">
+						<!-- 
+						<img src="images/icons.png"> -->
+						<input type="text" class="form-control" placeholder="Please enter keywords" aria-describedby="sizing-addon1" id="keyword">
+						<span class="input-group-btn">
+							<button class="btn btn-default" href="javascript:;" type="button" style='color:#009393;Font-size:18px' onclick="search()">search</button>
+						</span>
+					</div>
+					<div class="layui-row" id="btns-type">
+						<p>
+							<label><input type="radio" name="test" checked="checked" value="Dis"><span>Dis</span></label>
+							<label><input type="radio" name="test" value="Acuname"><span>Acuname</span></label>
+							<label><input type="radio" name="test" value="MACC"><span>MACC</span></label>
+						</p>
+
+						<div class="container ">
+							<h3 style="color: black">历史记录</h3>
+							<ul class="breadcrumb br">
+
+							</ul>
+						</div>
+
+						<div class="layui-fluid" style="margin-top:20px;">
+							<div class="show" id="acupoint-list" style="height:450px;"></div>
+							<div class="fenye" id="fenye" style="text-align: center; "></div>
+						</div>
+
+					</div>
+
+				</div>
+
+	</body>
+	<style type="text/css">
+		.fenye {
+			border-radius: 50px;
+		}
+
+		.show {
+			color: #rgb(204, 66, 66);
+			/* padding-left: 20px;
+			padding-right: 20px; */
+			height: 35px;
+			font-size: 16px;
+			line-height: 35px;
+			/* text-align: center; */
+			/* border: 2px solid #d2d2d2;
+			border-radius: 60px; */
+			margin-right: 12px;
+		}
+
+		input[type="radio"] {
+			display: none;
+		}
+
+		input[type="radio"]+span {
+			/* display: inline-block; */
+			padding-left: 20px;
+			padding-right: 20px;
+			height: 35px;
+			font-size: 14px;
+			line-height: 35px;
+			text-align: center;
+			border: 1px solid #d2d2d2;
+			border-radius: 50px;
+			color: rgba(204, 66, 66, 0.5);
+			background-color: white;
+			margin-right: 12px;
+		}
+
+		input[type="radio"]:checked+span {
+			border: 2px solid #009393;
+			background-color: #2F4056;
+			color: #009393;
+		}
+	</style>
+
+	<script>
+		layui.use('laypage', function() {
+			var laypage = layui.laypage;
+			// var element = layui.element;
+			var count = 0;
+			var total;
+			var key;
+			search = function() {
+
+				var flag = 1
+				if ($('#keyword').val() == '') {
+					alert("请输入你要搜索的内容");
+					flag = 0;
+					return false;
+				}
+
+				if (flag == 1) {
+					var info = {
+						userId: localStorage.getItem('userid'),
+						content: $('#keyword').val()
+					}
+
+					$.ajax({
+						type: 'POST',
+						url: "http://101.132.157.72:8086/SHistory/save",
+						contentType: 'application/json',
+						data: JSON.stringify(info),
+						success: function() {
+							console.log('成功存储！！')
+						}
+					})
+				}
+
+				// else if ($('#keyword').val() == key) {
+				// 	location.reload();
+				// }
+				// key=$('#keyword').val();
+				if ($("input[type=radio][name=test]:checked").val() == "Acuname") {
+					$.ajax({
+						type: 'GET',
+
+						url: "http://101.132.157.72:8086/acupoint/likeName?key=" + $('#keyword').val(),
+
+						async: false,
+						success: function(datas) {
+							count = datas.length;
+							total = datas;
+							localStorage.setItem('acuname', datas.acuName);
+						},
+						error: function(XMLHttpRequest, textStatus, errorThrown) {
+							// 状态码
+							console.log(XMLHttpRequest.status);
+							// 状态
+							console.log(XMLHttpRequest.readyState);
+							// 错误信息   
+							console.log(textStatus);
+						}
+					})
+				} else if ($("input[type=radio][name=test]:checked").val() == "MACC") {
+					$.ajax({
+						type: 'GET',
+
+						url: "http://101.132.157.72:8086/acupoint/meridian?meridian=" + $('#keyword').val(),
+
+						async: false,
+						success: function(datas) {
+							count = datas.length;
+							total = datas;
+
+						},
+						error: function(XMLHttpRequest, textStatus, errorThrown) {
+							// 状态码
+							console.log(XMLHttpRequest.status);
+							// 状态
+							console.log(XMLHttpRequest.readyState);
+							// 错误信息   
+							console.log(textStatus);
+						}
+					})
+				} else if ($("input[type=radio][name=test]:checked").val() == "Dis") {
+					$.ajax({
+						type: 'GET',
+
+						url: "http://101.132.157.72:8086/acupoint/symptom?symptom=" + $('#keyword').val(),
+
+						async: false,
+						success: function(datas) {
+							count = datas.length;
+							total = datas;
+
+						},
+						error: function(XMLHttpRequest, textStatus, errorThrown) {
+							// 状态码
+							console.log(XMLHttpRequest.status);
+							// 状态
+							console.log(XMLHttpRequest.readyState);
+							// 错误信息   
+							console.log(textStatus);
+						}
+					})
+				}
+				if (count == 0) {
+					alert("没有你想要的结果");
+				}
+
+				function showReocrd(pageNo, pageSize, total) {
+					$.each(total, function(index, item) {
+						if (index >= (pageNo - 1) * pageSize && index < pageNo * pageSize) {
+							var lianjie = $(
+								"<a href='http://127.0.0.1:8848/xuewei/acupoint.html?acuname=" + item.acupointName +
+								"'style='color:#ffffff;heght=50px;background-color: rgba(0,0,0,0.5);border-radius: 5px;border: 1px solid #ffffff;font-size:20px;'></a>"
+							).append(item.acupointName);
+							var title = $("<div></div>").append(
+								lianjie);
+							var content = $(
+								"<div></div>"
+							).append(
+								item.acupointFunction);
+							var content1 = $(
+								"<div></div>"
+							).append(
+								item.acupointMeridian);
+							var i = $(
+								"<div style='color:rgb(0, 85, 51);background-color:rgba(255, 255, 255,0.5);border-radius: 40px;border: 1px solid #ffffff;'></div>"
+							).append(content, content1);
+							var t = $("<div></div>").append(title, i);
+							$("#acupoint-list").append(t);
+						}
+					})
+				}
+				showReocrd(1, 4, total);
+				laypage.render({
+					elem: 'fenye',
+					theme: '#009393',
+					layout: ['prev', 'page', 'next', 'skip'],
+					first: '首页',
+					last: '尾页',
+					curr: 1,
+					limit: 4,
+					count: count, //数据总数，从服务端得到
+					jump: function(obj, first) { //obj为当前页的属性和方法，第一次加载first为true
+						if (!first) {
+							//清空以前加载的数据
+							$('#acupoint-list').empty();
+							//调用加载函数加载数据
+							showReocrd(obj.curr, obj.limit, total);
+						}
+					}
+				});
+
+			};
+
+
+		});
+	</script>
+	<script src="js/ios-parallax1.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('#top-image').iosParallax({
+				movementFactor: 100
+			});
+		});
+	</script>
+
+	<script>
+		$(document).ready(function() {
+			$('#keyword').bind('input propertychange', function() {
+				$('.history').hide();
+			})
+
+			$('#keyword').focus(function() {
+				$('.history').show()
+				$.ajax({
+					url: "http://101.132.157.72:8086/SHistory/list?userId=" + localStorage.getItem('userid'),
+					success: function(result) {
+						console.log(result);
+						$.each(result, function(i, item) {
+							var app = '<div class="his">' + item + '</div>'
+							$('.sousuo').append(app)
+						})
+					}
+				})
+			})
+
+
+			$('.his').click(function(e) {
+				$('#keyword').val($(this).html())
+				$('.history').hide();
+			})
+		})
+	</script>
+
+	<script>
+		$(function() {
+
+			$.ajax({
+				url: "http://101.132.157.72:8086/SHistory/list?userId=" + localStorage.getItem('userid'),
+				success: function(result) {
+					console.log(result);
+					$.each(result, function(i, item) {
+						var app = $("<li class='his' style='text-align: center'>" + item + "</li>")
+						$('.breadcrumb').append(app);
+						if (i == 9) return false;
+					})
+
+				}
+			})
+
+			$('.br').on('click', '.his', function(e) {
+				$('#keyword').val($(this).text())
+			})
+
+
+		})
+	</script>
+
+</html>

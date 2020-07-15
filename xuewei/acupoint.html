@@ -1,0 +1,138 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Acupoint</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="keywords" content="Movie_store Responsive web template, Bootstrap Web Templates, Flat Web Templates, Andriod Compatible web template, 
+Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyErricsson, Motorola web design" />
+		<script type="application/x-javascript">
+			addEventListener("load", function() {
+				setTimeout(hideURLbar, 0);
+			}, false);
+
+			function hideURLbar() {
+				window.scrollTo(0, 1);
+			}
+		</script>
+		<link href="css/bootstrap.css" rel='stylesheet' type='text/css' />
+		<link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
+		<link rel="stylesheet" href="layui/css/layui.css" media="all">
+		<!-- start plugins -->
+		<script src="js/jquery.min.js"></script>
+		<script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/Chart.min.js"></script>
+		<script type="text/javascript" src="js/jquery.params.js"></script>
+		<script type="text/javascript" src="layui/layui.js"></script>
+		<!-- <link href='http://fonts.useso.com/css?family=Roboto+Condensed:100,200,300,400,500,600,700,800,900' rel='stylesheet' type='text/css'> -->
+	</head>
+	<body>
+		<div class="container">
+			<div class="container_wrap">
+				<div class="header_top">
+					<div class="col-sm-3 logo"><a href="#"></a></div>
+					<div class="col-sm-3 header_right" style="position:absolute;right:-80px;bottom:680px;">
+						<ul class="header_right_box">
+							<li><img src="images/icon1.png"></li>
+							<li>
+								<p><a href="#" id="username" style="color:#ffffff" ;text-decoration: none;></a></p>
+							</li>
+						</ul>
+					</div>
+					<div class="clearfix"> </div>
+				</div>
+				<div class="content" style="background: rgba(128, 190, 193, 0.5);">
+					<div class="movie_top">
+						<div class="col-md-9 movie_box">
+							<div class="grid images_3_of_2" style="width:1000px; height:800px;">
+								<!-- div class="movie_image" id="pic" style="border: 1px solid #ffffff;width:40%; height:500px;display: inline;float: left;">
+									-->
+									<!-- <img class="img-responsive" id="pic"> -->
+									<div class="layui-carousel" id="test" lay-filter="test" style="border: 1px solid #ffffff;width: 100%;">
+										<div carousel-item="" id="lunbo"></div>
+									</div>
+									<div class="desc1 span_3_of_2 " style="border: 1px solid #ffffff;width: 100%;">
+										<p class="movie_option" style="height:5%"><strong style="font-size: 16px;color:rgba(60, 205, 211, 0.5);">Acupoint
+												name: </strong>
+											<div id="acuname"></div>
+										</p>
+										<p class="movie_option" style="height:5%"><strong style="font-size: 16px;color:rgba(60, 205, 211, 0.5);">AupointFunction:
+											</strong>
+											<div id="acufunc"></div>
+										</p>
+										<p class="movie_option" style="height:5%"><strong style="font-size: 16px;color:rgba(60, 205, 211, 0.5);">AcupointLocation:
+											</strong>
+											<div id="aculoc"></div>
+										</p>
+										<p class="movie_option" style="height:5%"><strong style="font-size: 16px;color:rgba(60, 205, 211, 0.5);">AcupointDissection:
+											</strong>
+											<div id="acudis"></div>
+										</p>
+										<p class="movie_option" style="height:5%"><strong style="font-size: 16px;color:rgba(60, 205, 211, 0.5);">AcupointOperate:
+											</strong>
+											<div id="acuopt"></div>
+										</p>
+										<p class="movie_option" style="height:5%"><strong style="font-size: 16px;color:rgba(60, 205, 211, 0.5);">AcupointMeridian:
+											</strong>
+											<div id="acum"></div>
+										</p>
+										<a class="btn" href="#" style="position:absolute;right:-180px;bottom:20px;color:rgb(0, 85, 51);background-color:rgba(255, 255, 255,0.5);border-radius: 50px;border: 1px solid #ffffff"><span>
+											</span>Collection</a>
+									</div>
+
+							</div>
+
+						</div>
+						<div class="clearfix"> </div>
+					</div>
+					<div class="clearfix"> </div>
+				</div>
+			</div>
+		</div>
+		</div>
+		<script>
+			layui.use(['laypage', 'layer', 'element', 'carousel', 'form', 'util'], function() {
+				var laypage = layui.laypage,
+					layer = layui.layer,
+					element = layui.element,
+					carousel = layui.carousel,
+					form = layui.form,
+					util = layui.util,
+					$ = layui.$;
+				var acu = $.query.get("acuname");
+				var ins = carousel.render({
+					elem: '#test',
+					interval: 3000
+				});
+				$.ajax({
+					type: 'GET',
+					url: "http://101.132.157.72:8086/acupoint/select1?name=" + acu,
+					async: false,
+					success: function(datas) {
+						$("#acuname").append(datas.acupointName);
+						$("#acufunc").append(datas.acupointFunction);
+						$("#aculoc").append(datas.acupointLocation);
+						$("#acudis").append(datas.acupointDissection);
+						$("#acuopt").append(datas.acupointOperate);
+						$("#acum").append(datas.acupointMeridian);
+						var srcs = new Array(2);
+						srcs[0] = datas.acupointPic;
+						srcs[1] = datas.acupointPic2;
+						$.each(srcs, function(index, item) {
+							var img = $("<img style='width:100% ;height:100%;'>").attr('src', item);
+							var imgitem = $("<div style='width:100% ;height:100%;'</div>").append(img);
+							$("#lunbo").append(imgitem);
+
+							ins.reload();
+						})
+					},
+				});
+			});
+		</script>
+
+		<script src="user.js"></script>
+	</body>
+
+
+</html>
